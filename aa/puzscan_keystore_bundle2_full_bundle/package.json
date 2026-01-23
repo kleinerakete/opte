@@ -1,0 +1,12 @@
+{
+  "name": "puzscan-demo-node",
+  "version": "1.0.0",
+  "description": "Demo Express HTTPS server using provided cert/key",
+  "main": "server_node.js",
+  "scripts": {
+    "start": "node server_node.js 8443"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
