@@ -385,15 +385,18 @@ nav#bottom-nav button.active { color: var(--accent2); }
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ---------- install banner ---------- */
-#install-banner {
+#install-banner,
+#ios-install-hint {
   display: none;
   background: linear-gradient(135deg, var(--accent), var(--accent2));
   padding: 14px 20px;
   text-align: center;
   font-size: .88rem; font-weight: 600;
 }
-#install-banner.visible { display: block; }
-#install-banner button {
+#install-banner.visible,
+#ios-install-hint.visible { display: block; }
+#install-banner button,
+#ios-install-hint button {
   background: rgba(255,255,255,.2);
   border: none; color: #fff;
   padding: 6px 14px; border-radius: 99px;

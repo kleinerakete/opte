@@ -538,6 +538,17 @@ window.addEventListener('appinstalled', () => {
   installBanner.classList.remove('visible');
 });
 
+/* iOS Safari: no beforeinstallprompt – show manual "Add to Home Screen" hint */
+const iosHint = document.getElementById('ios-install-hint');
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+// navigator.standalone is Safari-specific: true when running as an installed PWA
+if (isIOS && !navigator.standalone) {
+  iosHint?.classList.add('visible');
+}
+document.getElementById('btn-ios-close')?.addEventListener('click', () => {
+  iosHint?.classList.remove('visible');
+});
+
 /* ==============================================================
    INIT
    ============================================================== */
