@@ -1,0 +1,33 @@
+PUZSCAN APK Signing - Keystore generated
+
+Files:
+- puzscan_keystore.p12  (PKCS12 keystore)
+- puzscan_key.pem        (private key PEM)
+- puzscan_cert.pem       (certificate PEM)
+
+Keystore password (CHANGE THIS IMMEDIATELY):
+puzscan_keystore_pass_change_me
+
+How to use this keystore to sign an Android app (suggested steps):
+1) Convert PKCS12 to JKS (optional, modern apks accept PKCS12 directly):
+   keytool -importkeystore -srckeystore puzscan_keystore.p12 -srcstoretype PKCS12 -destkeystore puzscan_keystore.jks -deststoretype JKS
+   (You will be asked for source password and to set a new destination password.)
+
+2) Build Flutter release AAB or APK on your machine (requires Flutter SDK):
+   flutter build appbundle --release
+   # or
+   flutter build apk --release
+
+3) Sign the AAB/APK with jarsigner/apksigner:
+   # If you converted to JKS:
+   jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore puzscan_keystore.jks path/to/app-release-unsigned.apk <alias>
+
+   # Or use apksigner (preferred):
+   apksigner sign --ks puzscan_keystore.p12 --ks-key-alias puzscan-key --ks-pass pass:puzscan_keystore_pass_change_me path/to/app-release.apk
+
+4) Verify signature:
+   apksigner verify path/to/app-release.apk
+
+Notes:
+- For Play Store upload, prefer building an AAB and follow Play Console signing procedures.
+- Replace the keystore password and store the keystore securely. Do not commit it to public repos.

@@ -1,0 +1,24 @@
+{
+  "top_level": [
+    "SIGNING_INSTRUCTIONS.txt",
+    "puzscan_cert.pem",
+    "puzscan_key.pem",
+    "puzscan_keystore.p12"
+  ],
+  "num_files": 4,
+  "python_files_sample": [],
+  "other_extensions_counts": {
+    ".p12": 1,
+    ".pem": 2,
+    ".txt": 1
+  },
+  "is_python": false,
+  "has_requirements": false,
+  "has_setup": false,
+  "has_readme": false,
+  "detected_entry_pkg": null,
+  "detected_main_file": null,
+  "launcher_created": "start.sh",
+  "dockerfile_created": false,
+  "extracted_path": "/mnt/data/puzscan_keystore_bundle2_extracted"
+}

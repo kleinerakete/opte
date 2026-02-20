@@ -1,0 +1,18 @@
+version: '3'
+services:
+  api:
+    build: ./api
+    env_file:
+      - .env
+    environment:
+      - CLAUDE_HAIKU_ENABLED=${CLAUDE_HAIKU_ENABLED:-false}
+      - CLAUDE_HAIKU_VERSION=${CLAUDE_HAIKU_VERSION:-}
+    ports:
+      - "8000:8000"
+  worker:
+    build: ./worker
+    env_file:
+      - .env
+    environment:
+      - CLAUDE_HAIKU_ENABLED=${CLAUDE_HAIKU_ENABLED:-false}
+      - CLAUDE_HAIKU_VERSION=${CLAUDE_HAIKU_VERSION:-}
