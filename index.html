@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="CardScan">
+  <meta name="theme-color" content="#0f0f1a">
+  <meta name="description" content="YuGiOh & Pokémon Karten-Scanner mit Cardmarket-Preisen und Inventar-Verwaltung">
+  <title>CardScan – YuGiOh & Pokémon</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ============================================================
+     INSTALL BANNER
+     ============================================================ -->
+<div id="install-banner">
+  📲 App auf Startbildschirm hinzufügen
+  <button id="btn-install">Installieren</button>
+</div>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<header>
+  <h1>Card<span>Scan</span></h1>
+  <span id="header-count">0</span>
+</header>
+
+<!-- ============================================================
+     PAGES
+     ============================================================ -->
+<div id="app">
+
+  <!-- ---- SCANNER PAGE ---- -->
+  <section id="page-scanner" class="page active">
+    <!-- Type toggle -->
+    <div class="type-toggle">
+      <button data-type="yugioh" class="active">⚡ YuGiOh</button>
+      <button data-type="pokemon">🔴 Pokémon</button>
+    </div>
+
+    <!-- Camera box -->
+    <div id="scanner-box">
+      <video id="cam-video" autoplay playsinline muted></video>
+      <div id="scanner-overlay">
+        <div id="scanner-frame"></div>
+      </div>
+    </div>
+    <p id="scan-tip">Karte in den Rahmen halten und „Scannen" drücken</p>
+
+    <!-- Capture -->
+    <button class="btn btn-primary btn-full" id="btn-capture" style="margin-bottom:16px">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <circle cx="12" cy="12" r="3"/><path d="M3 9V7a2 2 0 012-2h2m10 0h2a2 2 0 012 2v2M3 15v2a2 2 0 002 2h2m10 0h2a2 2 0 002-2v-2"/>
+      </svg>
+      Karte scannen
+    </button>
+
+    <!-- Manual search -->
+    <div class="search-row">
+      <input type="text" id="search-input" placeholder="Kartenname eingeben…" autocomplete="off" autocorrect="off" spellcheck="false">
+      <button class="btn btn-primary" id="btn-search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Result -->
+    <div id="result-box">
+      <div class="result-header">
+        <img id="result-img" src="" alt="">
+        <div class="result-meta">
+          <h2 id="result-name"></h2>
+          <div id="result-badges"></div>
+        </div>
+      </div>
+
+      <div class="price-row">
+        <span class="price-label">💰 Marktwert</span>
+        <span class="price-value" id="result-price"></span>
+      </div>
+
+      <div class="result-actions">
+        <a id="result-cm-link" href="#" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+          Cardmarket
+        </a>
+        <button id="btn-add-inv" class="btn btn-success" style="flex:1">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 5v14M5 12h14"/>
+          </svg>
+          Zum Inventar
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---- INVENTORY PAGE ---- -->
+  <section id="page-inventory" class="page">
+    <div class="inventory-header">
+      <h2>📦 Inventar</h2>
+      <span id="inv-count" style="color:var(--text-muted);font-size:.85rem"></span>
+    </div>
+
+    <div class="filter-row">
+      <button data-filter="all" class="active">Alle</button>
+      <button data-filter="yugioh">YuGiOh</button>
+      <button data-filter="pokemon">Pokémon</button>
+    </div>
+
+    <div id="inventory-list"></div>
+  </section>
+
+  <!-- ---- STATS PAGE ---- -->
+  <section id="page-stats" class="page">
+    <h2 style="font-size:1.1rem;font-weight:700;margin-bottom:16px">📊 Statistiken</h2>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-val" id="stat-total">0</div>
+        <div class="stat-label">Karten gesamt</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-value">0.00 €</div>
+        <div class="stat-label">Gesamtwert</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-ygo">0</div>
+        <div class="stat-label">YuGiOh</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-val" id="stat-pkm">0</div>
+        <div class="stat-label">Pokémon</div>
+      </div>
+    </div>
+
+    <p class="section-title">🏆 Top 5 wertvollste Karten</p>
+    <div id="stats-top5"></div>
+
+    <div style="margin-top:24px">
+      <button id="btn-export" class="btn btn-secondary btn-full">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Inventar als CSV exportieren
+      </button>
+    </div>
+  </section>
+
+</div><!-- #app -->
+
+<!-- ============================================================
+     BOTTOM NAV
+     ============================================================ -->
+<nav id="bottom-nav">
+  <button data-page="scanner" class="active">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M3 9V7a2 2 0 012-2h2m10 0h2a2 2 0 012 2v2M3 15v2a2 2 0 002 2h2m10 0h2a2 2 0 002-2v-2"/>
+      <circle cx="12" cy="12" r="3"/>
+    </svg>
+    Scan
+  </button>
+  <button data-page="inventory">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+    </svg>
+    Inventar
+  </button>
+  <button data-page="stats">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+    </svg>
+    Statistik
+  </button>
+</nav>
+
+<!-- ============================================================
+     TOAST
+     ============================================================ -->
+<div id="toast"></div>
+
+<!-- ============================================================
+     SCRIPTS
+     ============================================================ -->
+<!-- Tesseract.js OCR for camera scan (loaded from CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+<script src="app.js"></script>
+
+<script>
+  /* Service worker registration */
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
+</script>
+
+</body>
+</html>
