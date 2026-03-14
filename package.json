@@ -1,0 +1,11 @@
+{
+  "name": "cardscan",
+  "version": "1.0.0",
+  "description": "YuGiOh & Pokémon card scanner PWA",
+  "scripts": {
+    "start": "npx http-server . -p 3000 -o"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
